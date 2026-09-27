@@ -131,9 +131,7 @@ export default function NavigationBar({ onAuth, onReport }) {
                   Cerrar sesión
                 </NavDropdown.Item>
               </NavDropdown>
-            )}
-
-            
+            )}            
           </div>
         </Navbar.Collapse>
       </Container>

@@ -1,26 +1,26 @@
 import { useState } from 'react';
 import Navbar from './componentes/Navbar';
-import AuthModal from './componentes/Modal-login'; 
+import AuthModal from './componentes/Modal-login';
+import Hero from './componentes/Inicio';
+import ReportModal from './componentes/Modal-reporte';
 
 function App() {
-  // Estado para controlar si el modal está visible o no
+  //MODAL LOGIN
   const [showAuthModal, setShowAuthModal] = useState(false);
-
-  // Funciones que abren y cierran el modal
   const handleOpenAuth = () => setShowAuthModal(true);
   const handleCloseAuth = () => setShowAuthModal(false);
 
-  const handleOpenReport = () => console.log("Abrir modal de reporte (próximamente)");
+  // MODAL REPORTE
+  const [showReportModal, setShowReportModal] = useState(false);
+  const handleOpenReport = () => setShowReportModal(true);
+  const handleCloseReport = () => setShowReportModal(false);
 
   return (
     <>
       <Navbar onAuth={handleOpenAuth} onReport={handleOpenReport} />
-      
-      {/* Nuestro nuevo modal. Le pasamos si debe mostrarse y la función para cerrarse */}
       <AuthModal show={showAuthModal} onHide={handleCloseAuth} />
-      
-      <main style={{ paddingTop: '80px', minHeight: '100vh', backgroundColor: '#082f49', color: 'white' }}>
-      </main>  {/* borrar proximamente , nos sirve para guia */}
+      <ReportModal show={showReportModal} onHide={handleCloseReport} />
+      <Hero onReport={handleOpenReport} />
     </>
   )
 }
