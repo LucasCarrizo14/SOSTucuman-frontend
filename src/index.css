@@ -1,112 +1,118 @@
-/* :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+/* ==========================================
+   TARJETAS DE CATEGORÍAS TIPO VIDEO (CORREGIDO)
+   ========================================== */
+.cat-video-card {
+  position: relative;
+  height: 340px; /* Volvemos a la altura fija para no romper la grilla */
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+.cat-video-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center; /* Mantiene el centro de las fotos bien enfocado */
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-body {
-  margin: 0;
+/* Efecto zoom suave */
+.cat-video-card:hover .cat-video-img {
+  transform: scale(1.05);
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
+/* Degradado oscuro para contraste */
+.cat-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.4) 45%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
+  transition: background 0.3s ease;
+  z-index: 1;
+}
+
+.cat-video-card:hover .cat-video-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+}
+
+/* CONTENIDO Y TEXTOS (Restaurados) */
+.cat-video-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem 1.5rem 2.5rem 1.5rem;
+  z-index: 2;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
+  justify-content: flex-end;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+.cat-video-title {
+  font-family: "Outfit", sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-bottom: 0;
+  transition: transform 0.3s ease;
+  transform: translateY(25px);
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
+.cat-video-details {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
+.cat-video-details p {
+  font-family: "Inter", sans-serif;
+  font-size: 0.85rem;
+  color: #e2e8f0;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.cat-video-link {
+  font-family: "Outfit", sans-serif;
+  color: #f97316;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.cat-video-card:hover .cat-video-title {
+  transform: translateY(0);
+}
+
+.cat-video-card:hover .cat-video-details {
+  opacity: 1;
+  max-height: 150px;
+}
+
+/* LÍNEA DECORATIVA */
+.cat-video-line {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  width: 25px;
+  height: 4px;
+  background-color: #f97316;
   border-radius: 4px;
-  color: var(--text-h);
+  transition: opacity 0.3s ease;
+  z-index: 3;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+.cat-video-card:hover .cat-video-line {
+  opacity: 0;
 }
-*/ 
