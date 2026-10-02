@@ -4,6 +4,9 @@ import AuthModal from "./componentes/Modal-login";
 import Hero from "./componentes/Inicio";
 import ReportModal from "./componentes/Modal-reporte";
 import Categorias from "./componentes/Categorias";
+import ComoFunciona from "./componentes/Como-funciona";
+import CarruselReportes from "./componentes/Reportes-activos";
+import Footer from "./componentes/Footer";
 function App() {
   //MODAL LOGIN
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -22,11 +25,12 @@ function App() {
       <AuthModal show={showAuthModal} onHide={handleCloseAuth} />
       <ReportModal show={showReportModal} onHide={handleCloseReport} />
       <Hero onReport={handleOpenReport} />
-      {/* Añadimos la sección de categorías debajo del Hero */}
       <Categorias
         activeCategory={activeCategory}
-        setActiveCategory={setActiveCategory}
-      />
+        setActiveCategory={setActiveCategory}/>
+      <ComoFunciona/>
+      <CarruselReportes onReport={handleOpenReport} />
+      <Footer/>
     </>
   );
 }
