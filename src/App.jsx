@@ -5,6 +5,7 @@ import Hero from "./componentes/Inicio";
 import ReportModal from "./componentes/Modal-reporte";
 import Categorias from "./componentes/Categorias";
 import ComoFunciona from "./componentes/Como-funciona";
+import Footer from "./componentes/Footer";
 function App() {
   //MODAL LOGIN
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -27,6 +28,7 @@ function App() {
         activeCategory={activeCategory}
         setActiveCategory={setActiveCategory}/>
         <ComoFunciona/>
+        <Footer/>
     </>
   );
 }

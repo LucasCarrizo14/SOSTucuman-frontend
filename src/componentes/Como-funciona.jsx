@@ -72,6 +72,20 @@ export default function ComoFunciona() {
       className="position-relative overflow-hidden"
       style={{ background: '#082f49', paddingTop: '5rem', paddingBottom: '5rem' }}
     >
+      {/* Ola decorativa en la parte superior */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, lineHeight: 0, zIndex: 3 }}>
+        <svg 
+          viewBox="0 0 1440 72" 
+          fill="none" 
+          preserveAspectRatio="none" 
+          style={{ display: 'block', width: '100%', height: '70px', transform: 'rotate(180deg)' }}
+        >
+          <path 
+            d="M0,72 L0,36 Q360,0 720,36 Q1080,72 1440,36 L1440,72 Z" 
+            fill="#ffffff" 
+          />
+        </svg>
+      </div>
       <div
         style={{ position: 'absolute', width: '400px', height: '400px', borderRadius: '50%', background: 'rgba(249,115,22,0.05)', filter: 'blur(80px)', top: '50%', right: '5%', transform: 'translateY(-50%)', pointerEvents: 'none' }}
       />
