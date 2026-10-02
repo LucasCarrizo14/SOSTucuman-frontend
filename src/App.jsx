@@ -5,6 +5,7 @@ import Hero from "./componentes/Inicio";
 import ReportModal from "./componentes/Modal-reporte";
 import Categorias from "./componentes/Categorias";
 import ComoFunciona from "./componentes/Como-funciona";
+import CarruselReportes from "./componentes/Reportes-activos";
 import Footer from "./componentes/Footer";
 function App() {
   //MODAL LOGIN
@@ -27,8 +28,9 @@ function App() {
       <Categorias
         activeCategory={activeCategory}
         setActiveCategory={setActiveCategory}/>
-        <ComoFunciona/>
-        <Footer/>
+      <ComoFunciona/>
+      <CarruselReportes onReport={handleOpenReport} />
+      <Footer/>
     </>
   );
 }
