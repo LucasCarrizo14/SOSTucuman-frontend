@@ -6,7 +6,7 @@ import ReportModal from "./componentes/Modal-reporte";
 import Categorias from "./componentes/Categorias";
 import ComoFunciona from "./componentes/Como-funciona";
 import CarruselReportes from "./componentes/Reportes-activos";
-
+import Footer from "./componentes/Footer";
 function App() {
   //MODAL LOGIN
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -27,10 +27,10 @@ function App() {
       <Hero onReport={handleOpenReport} />
       <Categorias
         activeCategory={activeCategory}
-        setActiveCategory={setActiveCategory}
-      />
-      <ComoFunciona />
+        setActiveCategory={setActiveCategory}/>
+      <ComoFunciona/>
       <CarruselReportes onReport={handleOpenReport} />
+      <Footer/>
     </>
   );
 }
