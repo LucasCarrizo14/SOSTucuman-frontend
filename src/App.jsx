@@ -6,6 +6,7 @@ import ReportModal from "./componentes/Modal-reporte";
 import Categorias from "./componentes/Categorias";
 import ComoFunciona from "./componentes/Como-funciona";
 import CarruselReportes from "./componentes/Reportes-activos";
+import TodosLosReportes from "./componentes/Todos-los-reportes"
 import Footer from "./componentes/Footer";
 function App() {
   //MODAL LOGIN
@@ -19,6 +20,12 @@ function App() {
   const handleCloseReport = () => setShowReportModal(false);
 
   const [activeCategory, setActiveCategory] = useState(null);
+
+  // FUNCIÓN TEMPORAL PARA LA NUEVA PÁGINA
+  const nuevaPagina = () => {
+    alert("Este botón te llevará a la nueva página.");
+    
+  };
   return (
     <>
       <Navbar onAuth={handleOpenAuth} onReport={handleOpenReport} />
@@ -30,6 +37,7 @@ function App() {
         setActiveCategory={setActiveCategory}/>
       <ComoFunciona/>
       <CarruselReportes onReport={handleOpenReport} />
+      <TodosLosReportes onReport={nuevaPagina} />
       <Footer/>
     </>
   );
