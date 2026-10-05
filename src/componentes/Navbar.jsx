@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Navbar, Nav, Container, Button, NavDropdown } from "react-bootstrap";
 import logoImg from "../assets/imagenes/LOGOO.png";
+import { Link } from "react-router-dom";
 
 export default function NavigationBar({ onAuth, onReport }) {
   const [scrolled, setScrolled] = useState(false);
@@ -63,8 +64,10 @@ export default function NavigationBar({ onAuth, onReport }) {
       <Container>
         {/* LOGO */}
         <Navbar.Brand
-          href="#inicio"
+          as={Link}
+          to="/"
           className="d-flex align-items-center gap-2"
+          style={{ textDecoration: "none" }}
         >
           <img
             src={logoImg}
