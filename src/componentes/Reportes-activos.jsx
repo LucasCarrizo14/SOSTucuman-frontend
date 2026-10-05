@@ -1,5 +1,11 @@
 import React, { useState, useRef } from "react";
 import { Card, Button, Badge, Container } from "react-bootstrap";
+import {
+  LightbulbFill,
+  ConeStriped,
+  TrashFill,
+  Stoplights,
+} from "react-bootstrap-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 import imgAlumbrado1 from "../assets/imagenes/AlumbradoPublico1.jpeg";
 import imgAlumbrado4 from "../assets/imagenes/AlumbradoPublico4.jpeg";
@@ -109,10 +115,10 @@ const CarruselReportes = ({ onReport }) => {
   const [categoriaActiva, setCategoriaActiva] = useState("Alumbrado Público");
 
   const categorias = [
-    { nombre: "Alumbrado Público", icono: "💡" },
-    { nombre: "Baches y Calles", icono: "🛣️" },
-    { nombre: "Higiene Urbana", icono: "🗑️" },
-    { nombre: "Semáforos y Tránsito", icono: "🚦" },
+    { nombre: "Alumbrado Público", icono: <LightbulbFill /> },
+    { nombre: "Baches y Calles", icono: <ConeStriped /> },
+    { nombre: "Higiene Urbana", icono: <TrashFill /> },
+    { nombre: "Semáforos y Tránsito", icono: <Stoplights /> },
   ];
 
   const desplazar = (direccion) => {
