@@ -4,7 +4,7 @@ import Navbar from "./componentes/Navbar";
 import AuthModal from "./componentes/Modal-login";
 import ReportModal from "./componentes/Modal-reporte";
 import Rutas from "./componentes/routes/Rutas";
-import Footer from "./componentes/Footer";
+
 
 function App() {
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -30,7 +30,7 @@ function App() {
         setActiveCategory={setActiveCategory}
       />
 
-      <Footer />
+      
     </BrowserRouter>
   );
 }

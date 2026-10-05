@@ -1,9 +1,6 @@
 import { Container } from "react-bootstrap";
-// 1. Importamos useNavigate de react-router-dom
 import { useNavigate } from "react-router-dom";
-
 export default function TodosReportes() {
-  // 2. Inicializamos el hook
   const navigate = useNavigate();
 
   return (
@@ -68,7 +65,6 @@ export default function TodosReportes() {
             </p>
 
             <button
-              // 3. Cambiamos el onClick para que navegue a la ruta de tu página de reportes
               onClick={() => navigate("/reportes")}
               className="btn rounded-pill fw-bold text-white shadow border-0 px-5 py-3"
               style={{

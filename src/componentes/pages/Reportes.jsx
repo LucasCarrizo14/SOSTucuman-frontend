@@ -1,20 +1,6 @@
 import { useState, useEffect } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  Badge,
-  Form,
-  Button,
-  InputGroup,
-} from "react-bootstrap";
-import {
-  Search,
-  GridFill,
-  PersonFill,
-  GeoAltFill,
-} from "react-bootstrap-icons";
+import { Container, Row, Col, Card, Badge, Form, Button, InputGroup,} from "react-bootstrap";
+import {Search, GridFill, PersonFill, GeoAltFill,} from "react-bootstrap-icons";
 import fondoreportes from "../../assets/imagenes/FotoFondoReportes.jpg";
 
 export default function ReportesPage() {
@@ -22,7 +8,7 @@ export default function ReportesPage() {
   const [usuario, setUsuario] = useState(null);
 
   // Estados para Pestañas y Filtros
-  const [tabActiva, setTabActiva] = useState("todos"); // "todos" o "mis-reportes"
+  const [tabActiva, setTabActiva] = useState("todos"); 
   const [busqueda, setBusqueda] = useState("");
   const [categoria, setCategoria] = useState("Todas");
   const [estado, setEstado] = useState("Todos");
