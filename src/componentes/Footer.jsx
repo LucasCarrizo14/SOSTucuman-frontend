@@ -7,6 +7,7 @@ import {
   GeoAltFill,
   EnvelopeFill,
   TelephoneFill,
+  Tools,
 } from "react-bootstrap-icons";
 import logoImg from "../assets/imagenes/LOGOO.png";
 
@@ -204,6 +205,22 @@ export default function Footer() {
                   style={{ color: "#f97316", fontSize: "1.1rem" }}
                 />
                 <span>+54 (381) 456-7890</span>
+              </div>
+              <div className="d-flex align-items-center gap-2">
+                <Tools style={{ color: "#f97316", fontSize: "1.1rem" }} />
+                <a
+                  href="/404"
+                  className="text-decoration-none"
+                  style={{ color: "rgba(255,255,255,0.65)" }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.color = "#f97316")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.color = "rgba(255,255,255,0.65)")
+                  }
+                >
+                  Cuadrillas
+                </a>
               </div>
             </div>
           </Col>
