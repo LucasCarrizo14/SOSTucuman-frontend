@@ -28,7 +28,7 @@ export default function Error404() {
         </h1>
 
         <p className="mx-auto mb-5 opacity-75" style={{ maxWidth: '550px', fontSize: '1.1rem', fontFamily: 'Inter, sans-serif' }}>
-          El enlace tomó un desvío inesperado. No hace falta reportarlo ,podemos ayudarte a volver a una zona conocida.
+          El enlace tomó un desvío inesperado. No hace falta reportarlo podemos ayudarte a volver a una zona conocida.
         </p>
 
         <div className="d-flex flex-wrap justify-content-center gap-3">
