@@ -2,13 +2,20 @@ import { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Badge, Form, Button, InputGroup,} from "react-bootstrap";
 import {Search, GridFill, PersonFill, GeoAltFill,} from "react-bootstrap-icons";
 import fondoreportes from "../../assets/imagenes/FotoFondoReportes.jpg";
+import { useLocation } from "react-router-dom";
 
 export default function ReportesPage() {
+  const location = useLocation();
   const [reportes, setReportes] = useState([]);
   const [usuario, setUsuario] = useState(null);
 
   // Estados para Pestañas y Filtros
-  const [tabActiva, setTabActiva] = useState("todos"); 
+  const [tabActiva, setTabActiva] = useState(location.state?.tabActiva || "todos");
+  useEffect(() => {
+    if (location.state?.tabActiva) {
+      setTabActiva(location.state.tabActiva);
+    }
+  }, [location.state]); 
   const [busqueda, setBusqueda] = useState("");
   const [categoria, setCategoria] = useState("Todas");
   const [estado, setEstado] = useState("Todos");

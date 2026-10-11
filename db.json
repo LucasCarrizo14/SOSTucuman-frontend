@@ -1,0 +1,36 @@
+{
+  "usuarios": [
+    {
+      "id": "1",
+      "nombre": "Sol Geronimo",
+      "email": "solgeronimo02@gmail.com",
+      "password": "Sol123"
+    },
+    {
+      "id": "2",
+      "nombre": "Lucas Carrizo",
+      "email": "lucas.maxi.c@gmail.com",
+      "password": "Lucas123"
+    },
+    {
+      "id": "3",
+      "nombre": "Geogina Costilla",
+      "email": "Geoginacostilla@gmail.com",
+      "password": "Georgina123"
+    },
+    {
+      "nombre": "Sofia Perez",
+      "email": "SofiaP@gmail.com",
+      "password": "Sofia123",
+      "id": "2QOSMJLpz1s"
+    },
+    {
+      "nombre": "Camila Gonzales",
+      "email": "CamilaG@gmail.com",
+      "password": "Camila123",
+      "id": "jLBInIZNoDo"
+    }
+  ],
+  "reportes": [],
+  "$schema": "./node_modules/json-server/schema.json"
+}
