@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Card, Button, Badge, Container } from "react-bootstrap";
 import {
   LightbulbFill,
@@ -6,12 +6,12 @@ import {
   TrashFill,
   Stoplights,
 } from "react-bootstrap-icons";
+import axios from "axios";
+import Swal from "sweetalert2";
 import "bootstrap/dist/css/bootstrap.min.css";
-import imgAlumbrado1 from "../assets/imagenes/AlumbradoPublico1.jpeg";
-import imgAlumbrado4 from "../assets/imagenes/AlumbradoPublico4.jpeg";
-import imgBache from "../assets/imagenes/Bache3.jpeg";
-import imgBasural from "../assets/imagenes/Basural3.jpeg";
-import imgSemaforo from "../assets/imagenes/Semaforo3.jpeg";
+
+// Variable de entorno para tu JSON Server
+const API_URL = import.meta.env.VITE_API_URL;
 
 // 1. COMPONENTE TARJETA
 const ReporteTarjeta = ({ reporte }) => {
@@ -21,9 +21,33 @@ const ReporteTarjeta = ({ reporte }) => {
   const [haVotado, setHaVotado] = useState(false);
 
   const manejarVoto = () => {
+    // Verificamos si el usuario está logueado para poder votar
+    const usuarioLogueado = localStorage.getItem("sostucumanNombre");
+
+    if (!usuarioLogueado) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Iniciá sesión',
+        text: 'Necesitás estar registrado para apoyar un reporte.'
+      });
+      return;
+    }
+
     if (!haVotado) {
       setCantidadAfectados((prev) => prev + 1);
       setHaVotado(true);
+      
+      // Notificación tipo "Toast" para que no interrumpa la navegación
+      Swal.fire({
+        icon: 'success',
+        title: '¡Gracias por apoyar!',
+        text: 'Tu voto ayuda a darle prioridad a este problema.',
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+      });
     } else {
       setCantidadAfectados((prev) => prev - 1);
       setHaVotado(false);
@@ -31,7 +55,7 @@ const ReporteTarjeta = ({ reporte }) => {
   };
 
   const obtenerColorEstado = (estado) => {
-    switch (estado.toLowerCase()) {
+    switch (estado?.toLowerCase()) {
       case "urgente":
         return "danger";
       case "pendiente":
@@ -50,19 +74,17 @@ const ReporteTarjeta = ({ reporte }) => {
   return (
     <Card
       className="shadow-sm border-0 h-100 flex-shrink-0 rounded-4"
-      // Se usa un min-width para responsividad, evitando que se aplasten en celulares
       style={{ width: "300px", maxWidth: "85vw" }}
     >
-      {/* Se añade un div gris como placeholder de la imagen rota en tu captura */}
       <div
         className="bg-light rounded-top-4 d-flex justify-content-center align-items-center"
         style={{ height: "160px" }}
       >
         <img
           src={reporte.imagen}
-          alt="Reporte"
+          alt={reporte.titulo || "Reporte"}
           className="object-fit-cover w-100 h-100 rounded-top-4"
-          onError={(e) => (e.target.style.display = "none")} // Oculta la imagen si está rota
+          onError={(e) => (e.target.style.display = "none")}
         />
       </div>
 
@@ -110,9 +132,8 @@ const ReporteTarjeta = ({ reporte }) => {
 // 2. COMPONENTE PRINCIPAL (CARRUSEL + FILTROS)
 const CarruselReportes = ({ onReport }) => {
   const carruselRef = useRef(null);
-
-  // Estado para la categoría activa
   const [categoriaActiva, setCategoriaActiva] = useState("Alumbrado Público");
+  const [reportes, setReportes] = useState([]);
 
   const categorias = [
     { nombre: "Alumbrado Público", icono: <LightbulbFill /> },
@@ -134,72 +155,37 @@ const CarruselReportes = ({ onReport }) => {
     }
   };
 
-  // Datos actualizados incluyendo la propiedad "categoria"
-  const datosPrueba = [
-    {
-      id: 1,
-      imagen: imgAlumbrado1,
-      estado: "Urgente",
-      tiempo: "Hace 1 día",
-      descripcion: "Poste de luz roto y expuesto a inclemencias o vandalismo. ",
-      ubicacion: "Senderos del Parque 9 de Julio.",
-      afectadosIniciales: 14,
-      categoria: "Alumbrado Público",
-    },
-    {
-      id: 2,
-      imagen: imgAlumbrado4,
-      estado: "En proceso",
-      tiempo: "Hace 3 días",
-      descripcion:
-        "Cableado de alumbrado al descubierto sobre la vereda con riesgo para peatones. ",
-      ubicacion: "Bulnes 1450",
-      afectadosIniciales: 11,
-      categoria: "Alumbrado Público",
-    },
-    {
-      id: 3,
-      imagen: imgBache,
-      estado: "Pendiente",
-      tiempo: "Hace 2 días",
-      descripcion:
-        "Rotura de pavimento asociada a filtraciones o colapso de la red de agua/cloacas con agua estancada.",
-      ubicacion: "Av. Kirchner y Pellegrini.",
-      afectadosIniciales: 32,
-      categoria: "Baches y Calles",
-    },
-    {
-      id: 4,
-      imagen: imgSemaforo,
-      estado: "En revisión",
-      tiempo: "Hace 2 días",
-      descripcion:
-        "Interrupción del servicio por mantenimiento preventivo o reparación de plaqueta electrónica.",
-      ubicacion: "frente a Plaza Independencia",
-      afectadosIniciales: 5,
-      categoria: "Semáforos y Tránsito",
-    },
-    {
-      id: 5,
-      imagen: imgBasural,
-      estado: "Pendiente",
-      tiempo: "Hace 1 día",
-      descripcion:
-        "Reincidencia de vertederos ilegales en zonas señalizadas como prohibidas.",
-      ubicacion: "en Av. Roca 1500.",
-      afectadosIniciales: 8,
-      categoria: "Higiene Urbana",
-    },
-  ];
+  useEffect(() => {
+    const obtenerReportes = async () => {
+      try {
+        const respuesta = await axios.get(`${API_URL}/reportes`);
+        setReportes(respuesta.data.reverse());
+      } catch (error) {
+        console.error("Error al cargar los reportes:", error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Problemas de conexión',
+          text: 'No pudimos cargar los reportes de SosTucumán en este momento. Por favor, recargá la página más tarde.'
+        });
+      }
+    };
 
-  // Filtramos los reportes basándonos en la categoría seleccionada
-  const reportesFiltrados = datosPrueba.filter(
+    obtenerReportes();
+
+    const actualizarLista = () => obtenerReportes();
+    window.addEventListener("reporteCreado", actualizarLista);
+
+    return () => {
+      window.removeEventListener("reporteCreado", actualizarLista);
+    };
+  }, []);
+
+  const reportesFiltrados = reportes.filter(
     (reporte) => reporte.categoria === categoriaActiva,
   );
 
   return (
     <Container className="py-5">
-      {/* ENCABEZADO: Título y Botón Nuevo Reporte */}
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <h2
           className="fw-bolder mb-0"
@@ -216,7 +202,6 @@ const CarruselReportes = ({ onReport }) => {
         </Button>
       </div>
 
-      {/* BARRA DE FILTROS */}
       <div
         className="d-flex gap-2 mb-4 overflow-x-auto pb-2"
         style={{ scrollbarWidth: "none" }}
@@ -242,9 +227,7 @@ const CarruselReportes = ({ onReport }) => {
         ))}
       </div>
 
-      {/* CONTENEDOR DEL CARRUSEL Y FLECHAS */}
       <div className="position-relative">
-        {/* Flecha Izquierda - Se oculta en móviles para no tapar contenido */}
         <Button
           variant="light"
           className="position-absolute top-50 start-0 translate-middle rounded-circle shadow border-0 z-3 p-0 d-none d-md-flex justify-content-center align-items-center"
@@ -254,17 +237,15 @@ const CarruselReportes = ({ onReport }) => {
           &#10094;
         </Button>
 
-        {/* Carrusel Deslizable */}
         <div
           ref={carruselRef}
           className="d-flex gap-4 py-3 overflow-x-auto px-2"
           style={{
             scrollSnapType: "x mandatory",
-            scrollbarWidth: "none", // Oculta la barra nativa en Firefox
-            msOverflowStyle: "none", // Oculta la barra nativa en Edge
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
           }}
         >
-          {/* Estilo en línea para ocultar la barra en Chrome/Safari y evitar el diseño roto */}
           <style>{`.overflow-x-auto::-webkit-scrollbar { display: none; }`}</style>
 
           {reportesFiltrados.length > 0 ? (
@@ -280,7 +261,6 @@ const CarruselReportes = ({ onReport }) => {
           )}
         </div>
 
-        {/* Flecha Derecha - Se oculta en móviles */}
         <Button
           variant="light"
           className="position-absolute top-50 start-100 translate-middle rounded-circle shadow border-0 z-3 p-0 d-none d-md-flex justify-content-center align-items-center"
@@ -291,7 +271,6 @@ const CarruselReportes = ({ onReport }) => {
         </Button>
       </div>
 
-      {/* TEXTO DE PIE DE PÁGINA */}
       <div className="mt-4 text-muted">
         Mostrando{" "}
         <span className="fw-bold text-dark">{reportesFiltrados.length}</span>{" "}

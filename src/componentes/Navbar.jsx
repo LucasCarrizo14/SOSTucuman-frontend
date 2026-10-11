@@ -172,7 +172,7 @@ export default function NavigationBar({ onAuth, onReport }) {
                     {usuario.email}
                   </small>
                 </div>
-                <NavDropdown.Item href="#reportes" className="py-2 fw-medium">
+                <NavDropdown.Item as={Link} to="/reportes" state={{ tabActiva: "mis-reportes" }} className="py-2 fw-medium">
                   Mis reportes
                 </NavDropdown.Item>
                 <NavDropdown.Divider />

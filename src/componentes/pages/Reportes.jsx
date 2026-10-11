@@ -1,14 +1,26 @@
 import { useState, useEffect } from "react";
-import { Container, Row, Col, Card, Badge, Form, Button, InputGroup,} from "react-bootstrap";
-import {Search, GridFill, PersonFill, GeoAltFill,} from "react-bootstrap-icons";
+import { Container, Row, Col, Card, Badge, Form, Button, InputGroup } from "react-bootstrap";
+import { Search, GridFill, PersonFill, GeoAltFill } from "react-bootstrap-icons";
+import axios from "axios";
 import fondoreportes from "../../assets/imagenes/FotoFondoReportes.jpg";
+import { useLocation } from "react-router-dom";
+
+// Variable de entorno para JSON Server
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function ReportesPage() {
+  const location = useLocation();
   const [reportes, setReportes] = useState([]);
   const [usuario, setUsuario] = useState(null);
 
   // Estados para Pestañas y Filtros
-  const [tabActiva, setTabActiva] = useState("todos"); 
+  const [tabActiva, setTabActiva] = useState(location.state?.tabActiva || "todos");
+  useEffect(() => {
+    if (location.state?.tabActiva) {
+      setTabActiva(location.state.tabActiva);
+    }
+  }, [location.state]); 
+  
   const [busqueda, setBusqueda] = useState("");
   const [categoria, setCategoria] = useState("Todas");
   const [estado, setEstado] = useState("Todos");
@@ -30,7 +42,8 @@ export default function ReportesPage() {
     "Urgente",
   ];
 
-  const cargarDatos = () => {
+  // Consumimos los datos desde db.json con Axios
+  const cargarDatos = async () => {
     const nombreGuardado = localStorage.getItem("sostucumanNombre");
     const emailGuardado = localStorage.getItem("sostucumanEmail");
 
@@ -40,16 +53,20 @@ export default function ReportesPage() {
       setUsuario(null);
     }
 
-    const reportesGuardados = JSON.parse(
-      localStorage.getItem("reportes_sos") || "[]",
-    );
-    setReportes(reportesGuardados);
+    try {
+      const respuesta = await axios.get(`${API_URL}/reportes`);
+      // Invertimos para ver los reportes más recientes primero
+      setReportes(respuesta.data.reverse());
+    } catch (error) {
+      console.error("Error al cargar los reportes desde la base de datos:", error);
+    }
   };
 
   useEffect(() => {
     cargarDatos();
     window.addEventListener("usuarioActualizado", cargarDatos);
     window.addEventListener("reporteCreado", cargarDatos);
+    
     return () => {
       window.removeEventListener("usuarioActualizado", cargarDatos);
       window.removeEventListener("reporteCreado", cargarDatos);
@@ -174,7 +191,7 @@ export default function ReportesPage() {
             style={{
               backgroundColor:
                 tabActiva === "todos" ? "#0ea5e9" : "transparent",
-              fontSize: "clamp(0.75rem, 2.5vw, 1rem)", // Fuente dinámica
+              fontSize: "clamp(0.75rem, 2.5vw, 1rem)", 
             }}
             onClick={() => {
               setTabActiva("todos");
@@ -220,7 +237,7 @@ export default function ReportesPage() {
 
         {/* CUERPO DE FILTROS BLANCO */}
         <div className="bg-white p-4 p-md-5 rounded-bottom-4 rounded-end-4 shadow-sm mb-5">
-          {/* BANNER MIS REPORTES (Solo visible en pestaña mis reportes) */}
+          {/* BANNER MIS REPORTES */}
           {tabActiva === "mis-reportes" && usuario && (
             <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center bg-light p-4 rounded-4 mb-4 border">
               <div className="d-flex align-items-center gap-3 mb-3 mb-md-0">
@@ -267,7 +284,7 @@ export default function ReportesPage() {
             </div>
           )}
 
-          {/* SECCIÓN DE FILTROS (Visible en ambas si hay usuario) */}
+          {/* SECCIÓN DE FILTROS */}
           {(tabActiva === "todos" ||
             (tabActiva === "mis-reportes" && usuario)) && (
             <>
@@ -334,7 +351,7 @@ export default function ReportesPage() {
                 </Button>
               </div>
 
-              {/* PILLS DE CATEGORÍAS RÁPIDAS (Solo afecta al filtro de categoría) */}
+              {/* PILLS DE CATEGORÍAS RÁPIDAS */}
               <div
                 className="d-flex gap-2 overflow-x-auto pb-2"
                 style={{ scrollbarWidth: "none" }}
@@ -393,9 +410,9 @@ export default function ReportesPage() {
                   className="position-relative bg-dark"
                   style={{ height: "200px" }}
                 >
-                  {reporte.foto ? (
+                  {reporte.imagen || reporte.foto ? (
                     <img
-                      src={reporte.foto}
+                      src={reporte.imagen || reporte.foto}
                       alt="Reporte"
                       className="w-100 h-100 object-fit-cover opacity-75"
                     />
@@ -476,20 +493,7 @@ export default function ReportesPage() {
                       >
                         ↑ 16
                       </Button>
-                      <Button
-                        variant="outline-danger"
-                        size="sm"
-                        className="rounded-pill px-3 fw-bold d-flex align-items-center gap-1 bg-danger bg-opacity-10 border-danger border-opacity-25 text-danger"
-                      >
-                        ↓ 0
-                      </Button>
                     </div>
-                    <span
-                      className="text-decoration-none fw-bold small"
-                      style={{ color: "#082f49", cursor: "pointer" }}
-                    >
-                      Ver detalle &gt;
-                    </span>
                   </div>
                 </Card.Body>
               </Card>
