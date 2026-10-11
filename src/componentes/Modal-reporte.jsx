@@ -1,5 +1,10 @@
 import { useState } from 'react';
-import { Modal, Button, Form, Alert } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+
+// Variable de entorno para la URL de JSON Server
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function ReportModal({ show, onHide }) {
   // Estados para los campos del formulario
@@ -13,13 +18,14 @@ export default function ReportModal({ show, onHide }) {
   const [mapaSrc, setMapaSrc] = useState('');
   const [loadingUbicacion, setLoadingUbicacion] = useState(false);
 
-  // Estado para mensajes de error
-  const [error, setError] = useState('');
-
   // 1. Lógica para obtener Geolocalización
   const obtenerUbicacion = () => {
     if (!navigator.geolocation) {
-      setError("Tu navegador no soporta la geolocalización.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Geolocalización no soportada',
+        text: 'Tu navegador no permite obtener la ubicación automáticamente.'
+      });
       return;
     }
 
@@ -32,7 +38,11 @@ export default function ReportModal({ show, onHide }) {
         setLoadingUbicacion(false);
       },
       () => {
-        setError("No se pudo obtener la ubicación automáticamente.");
+        Swal.fire({
+          icon: 'warning',
+          title: 'Error de ubicación',
+          text: 'No pudimos obtener tu ubicación. Por favor, escribí la dirección manualmente.'
+        });
         setLoadingUbicacion(false);
       }
     );
@@ -60,22 +70,29 @@ export default function ReportModal({ show, onHide }) {
     }
   };
 
-  // 4. Lógica para enviar el formulario y guardar en localStorage
-  const handleSubmit = (e) => {
+  // 4. Lógica para enviar el formulario a db.json
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
 
     // Validar que el usuario esté logueado
     const nombreUsuario = localStorage.getItem("sostucumanNombre");
     const emailUsuario = localStorage.getItem("sostucumanEmail");
 
     if (!nombreUsuario) {
-      setError("Debes iniciar sesión para publicar un reporte.");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Acceso denegado',
+        text: 'Debes iniciar sesión para publicar un reporte.'
+      });
       return;
     }
 
     if (!categoria || !titulo || !ubicacion || !descripcion) {
-      setError("Por favor, completa todos los campos obligatorios.");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Campos incompletos',
+        text: 'Por favor, completa todos los campos obligatorios marcados con un asterisco (*).'
+      });
       return;
     }
 
@@ -86,23 +103,41 @@ export default function ReportModal({ show, onHide }) {
       titulo,
       ubicacion,
       descripcion,
-      foto: fotoBase64,
+      imagen: fotoBase64,
       usuario: nombreUsuario,
       usuarioEmail: emailUsuario,
       fecha: new Date().toLocaleDateString("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" }),
-      estado: "Pendiente"
+      tiempo: "Recién publicado", 
+      estado: "Pendiente",
+      afectadosIniciales: 1 
     };
 
-    // Guardar en localStorage
-    const reportesExistentes = JSON.parse(localStorage.getItem("reportes_sos") || "[]");
-    reportesExistentes.unshift(nuevoReporte);
-    localStorage.setItem("reportes_sos", JSON.stringify(reportesExistentes));
+    try {
+      // Petición POST a JSON Server con Axios
+      await axios.post(`${API_URL}/reportes`, nuevoReporte);
 
-    // Avisar a la app que hay un reporte nuevo (para que se actualice la lista después)
-    window.dispatchEvent(new Event("reporteCreado"));
+      // Avisar a la app que hay un reporte nuevo
+      window.dispatchEvent(new Event("reporteCreado"));
 
-    // Cerrar y limpiar
-    handleClose();
+      // Alerta de éxito
+      Swal.fire({
+        icon: 'success',
+        title: '¡Reporte publicado!',
+        text: 'Tu reporte ha sido enviado con éxito.',
+        timer: 2000,
+        showConfirmButton: false
+      });
+
+      // Cerrar y limpiar
+      handleClose();
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error de conexión',
+        text: 'Hubo un problema al guardar el reporte en la base de datos. Intentá nuevamente.'
+      });
+      console.error(error);
+    }
   };
 
   const handleClose = () => {
@@ -112,7 +147,6 @@ export default function ReportModal({ show, onHide }) {
     setDescripcion('');
     setFotoBase64('');
     setMapaSrc('');
-    setError('');
     onHide();
   };
 
@@ -125,8 +159,6 @@ export default function ReportModal({ show, onHide }) {
       </Modal.Header>
 
       <Modal.Body className="p-4 bg-light">
-        {error && <Alert variant="danger">{error}</Alert>}
-
         <Form onSubmit={handleSubmit}>
           <div className="row g-3">
 
