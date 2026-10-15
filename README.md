@@ -83,4 +83,17 @@ Almacena datos dinámicos que fuerzan un re-renderizado de la interfaz cuando ca
 **2. `useEffect` (Sincronización y Efectos Secundarios)**
 Ejecuta lógica en respuesta a la renderización o cambios de estado.
 
-- **Escuchas Globales (Listeners):** En `App.jsx` configura los `addEventListener` al montar la aplicación para escuchar peticiones de apertura de modales. En `Navbar
+- **Escuchas Globales (Listeners):** En `App.jsx` configura los `addEventListener` al montar la aplicación para escuchar peticiones de apertura de modales. En `Navbar.jsx` detecta el evento de scroll de la ventana para cambiar los estilos y aplicar un fondo opaco.
+- **Carga Inicial de Datos:** En `Reportes.jsx` y `Reportes-activos.jsx`, se ejecuta una sola vez al montar el componente (`[]`) para realizar la petición `axios.get` y popular la interfaz con los reclamos de la base de datos.
+
+**3. `useRef` (Manipulación Directa del DOM)**
+Permite acceder a elementos del DOM sin provocar re-renderizados.
+
+- **Scroll Programático:** En `Reportes-activos.jsx`, engancha el contenedor del carrusel y utiliza el método nativo `scrollBy` para desplazar las tarjetas horizontalmente al presionar las flechas de navegación.
+- **Intersection Observer:** En `Como-funciona.jsx` observa cuándo la sección entra en el viewport del usuario para disparar las animaciones en cascada de la línea de tiempo.
+
+**4. `useLocation` y `useNavigate` (Enrutamiento)**
+Hooks importados de React Router DOM para el control de la navegación.
+
+- **Redirección Programática:** En `Todos-los-reportes.jsx`, `useNavigate` redirige al usuario a la vista de `/reportes` tras hacer clic en el botón de llamado a la acción.
+- **Paso de Estado en URL:** `useLocation` se utiliza en `Reportes.jsx` para leer parámetros ocultos pasados desde el `Navbar` (`state: { tabActiva: "mis-reportes" }`), permitiendo que la página se inicialice automáticamente filtrada por los reclamos del usuario.
