@@ -54,7 +54,15 @@ npx json-server --watch db.json --port 3001
 ```bash
 npm run dev
 ```
+---
+###  Metadatos y SEO On-Page
 
+- **Título (`<title>`):** Conciso y representativo (`SosTucumán`).
+- **Descripción (`<meta name="description">`):** Resume el objetivo del sitio orientándose a intenciones de búsqueda locales (_"Plataforma ciudadana para reportar baches, luminarias rotas y microbasurales en Tucumán."_).
+- **Palabras Clave (`<meta name="keywords">`):** Términos relevantes de búsqueda geolocalizada (`SosTucumán`, `reclamos Tucumán`, `reporte de baches`, `luminarias rotas`, `bacheo San Miguel de Tucumán`, `gestión urbana`).
+- **Social Media / Open Graph:** Metadatos preparados para la generación de tarjetas enriquecidas al compartir en redes sociales y mensajería (`og:title`, `og:description`, `og:image`, `og:url`).
+
+---
 ## Documentación Técnica y Arquitectura
 
 La plataforma fue diseñada aplicando el principio de Separación de Responsabilidades (_Separation of Concerns_), dividiendo el flujo de datos, el enrutamiento y la renderización visual.
