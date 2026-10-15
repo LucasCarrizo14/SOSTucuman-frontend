@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import AuthModal from "./componentes/Modal-login";
 import ReportModal from "./componentes/Modal-reporte";
 import Rutas from "./componentes/routes/Rutas";
@@ -13,6 +13,15 @@ function App() {
   const handleCloseReport = () => setShowReportModal(false);
 
   const [activeCategory, setActiveCategory] = useState(null);
+  // Boton "crear nuevo reporte"- pagina mi MIS REPORTES
+  useEffect(() => {
+    window.addEventListener("abrirModalAuth", handleOpenAuth);
+    window.addEventListener("abrirModalReporte", handleOpenReport);
+    return () => {
+      window.removeEventListener("abrirModalAuth", handleOpenAuth);
+      window.removeEventListener("abrirModalReporte", handleOpenReport);
+    };
+  }, []); 
 
   return (
     <>

@@ -7,7 +7,7 @@ import Error404 from "../pages/Error404";
 const Rutas = ({ onAuth, onReport, activeCategory, setActiveCategory }) => {
   return (
     <BrowserRouter>
-      <Navbar onAuth={onAuth} onReport={onReport} />
+      <Navbar onAuth={onAuth} />
       <Routes>
         {/* Ruta principal que carga tu Home */}
         <Route
