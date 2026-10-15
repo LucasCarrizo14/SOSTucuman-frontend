@@ -2,7 +2,9 @@
 
 Es una aplicación web interactiva que conecta las necesidades de los vecinos con la gestión urbana municipal. Permite a los ciudadanos identificar problemas en la vía pública, categorizarlos, consultar los pasos de resolución, visualizar reclamos activos de otros vecinos y votar sobre la urgencia de los mismos.
 
-**Integrantes:** Carrizo Lucas, Geronimo Sol
+**Desarrollada por:** 
+-Carrizo Lucas
+-Geronimo Sol
 
 ---
 
